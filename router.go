@@ -11,6 +11,9 @@ import (
 	"strings"
 )
 
+// 解析 routes 文件，根据里面的定义进行路由选择
+// (METHOD)	(URL PATTERN)	(Controller.Action)
+
 type Route struct {
 	Method      string   // e.g. GET
 	Path        string   // e.g. /app/{id}
@@ -262,6 +265,7 @@ func (router *Router) validate(route *Route) *Error {
 // 4: path
 // 5: action
 // 6: fixedargs
+// WS 代表的是 websocket
 var routePattern *regexp.Regexp = regexp.MustCompile(
 	"(?i)^(GET|POST|PUT|DELETE|OPTIONS|HEAD|WS|\\*)" +
 		"[(]?([^)]*)(\\))?[ \t]+" +

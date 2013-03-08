@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+// All data must be serialized to a string fot storage
+// All data may be viewed by the user (it is not encrypted), but it is safe from modification
 // A signed cookie (and thus limited to 4kb in size).
 // Restriction: Keys may not have a colon in them.
 type Session map[string]string

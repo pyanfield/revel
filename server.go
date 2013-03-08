@@ -21,6 +21,17 @@ var (
 
 // This method handles all requests.  It dispatches to handleInternal after
 // handling / adapting websocket connections.
+// To handle a Websocket connection:
+// Add a route using the WS method.
+// Add an action that accepts a *websocket.Conn parameter.
+// For example, add this your routes file:
+// 		WS /app/feed Application.Feed
+// Then write an action like this:
+// 
+// 		import "code.google.com/p/go.net/websocket"
+// 		func (c Application) Feed(user string, ws *websocket.Conn) revel.Result {
+// 			...
+// 		}
 func handle(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Upgrade") == "websocket" {
 		websocket.Handler(func(ws *websocket.Conn) {

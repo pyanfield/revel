@@ -30,6 +30,9 @@ type TemplateLoader struct {
 	templatePaths map[string]string
 }
 
+// Revel executes the template using the RenderArgs data map. Aside from application-provided data, Revel provides the following entries:
+// - “errors” - the map returned by Validation.ErrorMap
+// - “flash” - the data flashed by the previous request.
 type Template interface {
 	Name() string
 	Content() []string
@@ -40,11 +43,15 @@ var (
 	// The functions available for use in the templates.
 	TemplateFuncs = map[string]interface{}{
 		"url": ReverseUrl,
-		"eq":  func(a, b interface{}) bool { return a == b },
+		// <div class="message {{if eq .User "you"}}you{{end}}">
+		"eq": func(a, b interface{}) bool { return a == b },
+		// {{set . "title" "Basic Chat room"}}
+		// <h1>{{.title}}</h1>
 		"set": func(renderArgs map[string]interface{}, key string, value interface{}) template.HTML {
 			renderArgs[key] = value
 			return template.HTML("")
 		},
+		// Add a variable to an array, or start an array, in the given context.
 		"append": func(renderArgs map[string]interface{}, key string, value interface{}) template.HTML {
 			if renderArgs[key] == nil {
 				renderArgs[key] = []interface{}{value}
@@ -54,6 +61,13 @@ var (
 			return template.HTML("")
 		},
 		"field": NewField,
+		//	{{with $field := field "booking.Beds" .}}
+		//	<select name="{{$field.Name}}">
+		//  		{{option $field "1" "One king-size bed"}}
+		//  		{{option $field "2" "Two double beds"}}
+		//  		{{option $field "3" "Three beds"}}
+		//	</select>
+		//	{{end}}
 		"option": func(f *Field, val, label string) template.HTML {
 			selected := ""
 			if f.Flash() == val {
@@ -62,6 +76,10 @@ var (
 			return template.HTML(fmt.Sprintf(`<option value="%s"%s>%s</option>`,
 				html.EscapeString(val), selected, html.EscapeString(label)))
 		},
+		// {{with $field := field "booking.Smoking" .}}
+		//   {{radio $field "true"}} Smoking
+		//   {{radio $field "false"}} Non smoking
+		// {{end}}
 		"radio": func(f *Field, val string) template.HTML {
 			checked := ""
 			if f.Flash() == val {
@@ -142,7 +160,11 @@ var (
 			return date.Format(DateTimeFormat)
 		},
 	}
-
+	// Applications may register custom functions to use in templates.
+	// Here is an example:
+	// func init() {
+	// 	revel.TemplateFuncs["eq"] = func(a, b interface{}) bool { return a == b }
+	// }
 	Funcs = TemplateFuncs
 )
 

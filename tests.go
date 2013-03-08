@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+// A test suite is any struct that embeds revel.TestSuite
+// 		type ApplicationTest struct {
+// 			revel.TestSuite
+// 		}
+// Before() and After() are invoked before and after every test method, if present.
 type TestSuite struct {
 	Client       *http.Client
 	Response     *http.Response

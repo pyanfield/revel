@@ -13,6 +13,13 @@ import (
 	"time"
 )
 
+// 在自己实现的controller struct 里面，第一个就是要包含的类型必须是这个 revel.Controller
+//
+// For example:
+// 		type AppController struct{
+//			 *revel.Controller
+// 		}
+// 
 type Controller struct {
 	Name          string          // The controller name, e.g. "Application"
 	Type          *ControllerType // A description of the controller type.
@@ -148,6 +155,10 @@ func (c *Controller) RenderError(err error) Result {
 //
 // This action will render views/Users/ShowUser.html, passing in an extra
 // key-value "user": (User).
+//
+// if unsuccessful (e.g. It could not find the template), it returns an ErrorResult instead.
+// Note: Revel looks at the calling method name to determine the Template path and to look up the argument names.
+// Therefore, c.Render() may only be called from Actions.
 func (c *Controller) Render(extraRenderArgs ...interface{}) Result {
 	// Get the calling function name.
 	pc, _, line, ok := runtime.Caller(1)
@@ -207,11 +218,13 @@ func (c *Controller) RenderTemplate(templatePath string) Result {
 }
 
 // Uses encoding/json.Marshal to return JSON to the client.
+// Will serialie it using json.Marshal
 func (c *Controller) RenderJson(o interface{}) Result {
 	return RenderJsonResult{o}
 }
 
 // Uses encoding/xml.Marshal to return XML to the client.
+// Will serialie it using xml.Marshal
 func (c *Controller) RenderXml(o interface{}) Result {
 	return RenderXmlResult{o}
 }
@@ -226,6 +239,7 @@ func (c *Controller) RenderText(text string, objs ...interface{}) Result {
 }
 
 // Render a "todo" indicating that the action isn't done yet.
+// return a stub response (500)
 func (c *Controller) Todo() Result {
 	c.Response.Status = http.StatusNotImplemented
 	return c.RenderError(&Error{
@@ -284,6 +298,7 @@ func (c *Controller) RenderFile(file *os.File, delivery ContentDisposition) Resu
 //   c.Redirect(Controller.Action)
 //   c.Redirect("/controller/action")
 //   c.Redirect("/controller/%d/action", id)
+// It return a 302 (Temporary Redirect) status code.
 func (c *Controller) Redirect(val interface{}, args ...interface{}) Result {
 	if url, ok := val.(string); ok {
 		if len(args) == 0 {

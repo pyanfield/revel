@@ -39,6 +39,11 @@ func ValueBinder(f func(value string, typ reflect.Type) reflect.Value) Binder {
 	}
 }
 
+// The SQL standard time formats are build in.
+// Simply add the pattern to recognize to the TimeFormats variable, like this:
+//			func init() {
+//				revel.TimeFormats = append(revel.TimeFormats, "01/02/2006")
+//			}
 const (
 	DEFAULT_DATE_FORMAT     = "2006-01-02"
 	DEFAULT_DATETIME_FORMAT = "2006-01-02 15:04"
@@ -402,6 +407,9 @@ func bindReadSeeker(params *Params, name string, typ reflect.Type) reflect.Value
 
 // Parse the value string into a real Go value.
 // Returns 0 values when things can not be parsed.
+// http://robfig.github.com/revel/manual/binding.html
+// Note: Only ordered slices should be used when binding a slice of structs
+// for struct : Note: Properties must be exported in order to be bound.
 func Bind(params *Params, name string, typ reflect.Type) reflect.Value {
 	if typ == nil {
 		return reflect.ValueOf(nil)

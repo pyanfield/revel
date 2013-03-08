@@ -16,6 +16,19 @@ type Plugin interface {
 	Finally(c *Controller)
 }
 
+// To define a Plugin of your own, declare a type that embeds revel.EmptyPlugin, 
+// and override just the methods that you want. Then register it with revel.RegisterPlugin.
+//
+// 	type DbPlugin struct {
+// 		revel.EmptyPlugin
+// 	}
+// 	func (p DbPlugin) OnAppStart() {
+// 		...
+// 	}
+// 	func init() {
+// 		revel.RegisterPlugin(DbPlugin{})
+// 	}
+// Revel will invoke all methods on the single instance provided to RegisterPlugin, so ensure that the methods are threadsafe.
 // It provides default (empty) implementations for all the required methods.
 type EmptyPlugin struct{}
 

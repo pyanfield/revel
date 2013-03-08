@@ -12,6 +12,30 @@ import (
 	"time"
 )
 
+// Actions must return a revel.Result, which handles the response generation.
+// Each built-in Result has a default Status Code and Content Type. 
+// To override those defaults, simply set those properties on the response:
+//
+//			func (c Application) Action() revel.Result {
+//				// Each Result will set a status code by default.
+//				// You can override the default status code by setting one yourself:
+//				// c.Response.Status = 201
+//				c.Response.Status = http.StatusTeapot
+//				c.Response.ContentType = "application/dishware"
+//				return c.Render()
+//			}
+//
+// Here is an example of adding your own Result.
+// Create this type:
+// 			type Html string
+// 			func (r Html) Apply(req *Request, resp *Response) {
+// 				resp.WriteHeader(http.StatusOK, "text/html")
+// 				resp.Out.Write([]byte(r))
+// 			}
+// Then use it in an action:
+// 			func (c *Application) Action() revel.Result {
+// 				return Html("<html><body>Hello World</body></html>")
+// 			}
 type Result interface {
 	Apply(req *Request, resp *Response)
 }

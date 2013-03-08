@@ -14,6 +14,7 @@ type Flash struct {
 	Data, Out map[string]string
 }
 
+// An abbreviation of Flash.Out["error"] = message
 func (f Flash) Error(msg string, args ...interface{}) {
 	if len(args) == 0 {
 		f.Out["error"] = msg
@@ -22,6 +23,7 @@ func (f Flash) Error(msg string, args ...interface{}) {
 	}
 }
 
+// An abbreviation of Flash.Out["success"] = message
 func (f Flash) Success(msg string, args ...interface{}) {
 	if len(args) == 0 {
 		f.Out["success"] = msg

@@ -12,9 +12,23 @@ import (
 // - URL query string
 // - Form values
 // - File uploads
+// 在生成的项目文件的 routes 文件里面 (METHOD)	(URL Pattern)	(Controller.Actopm) 解析之后保存在 Controller.Params 里面
+// 所有的请求的 parameters 都会被收集到 Params 里面，包括：
+// URL Path parameters
+// URL Query parameters
+// Form values (mutipart or not)
+// File uploads
+// File uploads may be bound to any of the following types:
+// - *os.File
+// - []byte
+// - io.Reader
+// - io.ReadSeeker
+
 type Params struct {
 	url.Values
-	Files    map[string][]*multipart.FileHeader
+	Files map[string][]*multipart.FileHeader
+	// Note: Binding a file upload to os.
+	// File requires Revel to write it to a temp file (if it wasn’t already), making it less efficient than the other types.
 	tmpFiles []*os.File // Temp files used during the request.
 }
 

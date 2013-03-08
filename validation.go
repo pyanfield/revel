@@ -8,6 +8,15 @@ import (
 	"runtime"
 )
 
+//  Exsample of useing the Validation.
+//  c.Validation.Required(myName).Message("Your name is required")
+// 	c.Validation.MinSize(myName, 3).Message("Your name is not long enough")
+// 	if c.Validation.HasErrors() {
+// 		c.Validation.Keep()
+// 		c.FlashParams()
+// 		return c.Redirect(Application.Index)
+// 	}
+
 type ValidationError struct {
 	Message, Key string
 }
@@ -26,6 +35,8 @@ type Validation struct {
 	keep   bool
 }
 
+// Tell Revel to serialize the ValidationErrors to the Flash cookie.
+// Controller.FlashParams()    -->     Controller.Redirect(Action)
 func (v *Validation) Keep() {
 	v.keep = true
 }
@@ -34,6 +45,8 @@ func (v *Validation) Clear() {
 	v.Errors = []*ValidationError{}
 }
 
+// 如果 validation context 非空的话就返回 true
+// 以此来判断是否有 validation error 发生
 func (v *Validation) HasErrors() bool {
 	return len(v.Errors) > 0
 }
@@ -61,6 +74,7 @@ func (v *Validation) Error(message string, args ...interface{}) *ValidationResul
 
 // A ValidationResult is returned from every validation method.
 // It provides an indication of success, and a pointer to the Error (if any).
+// Each evaluation returns a ValidationResult. Failed ValidationResults are stored in the Validation context.
 type ValidationResult struct {
 	Error *ValidationError
 	Ok    bool
@@ -120,6 +134,30 @@ func (v *Validation) Match(str string, regex *regexp.Regexp) *ValidationResult {
 func (v *Validation) Email(str string) *ValidationResult {
 	return v.apply(Email{Match{emailPattern}}, str)
 }
+
+// As part of building the app, Revel records the name of the variable being validated, 
+// and uses that as the default key in the validation context (to be looked up later).
+// 我们检测到的错误是使用变量的名字作为key, 保存在 validation context中的，这样我们在后面就很容易的分辨出是那个值的什么类型的无效
+// 比如:
+//	 func (c Application) Hello(myName string) revel.Result {
+// 		c.Validation.Required(myName).Message("Your name is required")
+// 		c.Validation.MinSize(myName, 3).Message("Your name is not long enough")
+// 		if c.Validation.HasErrors() {
+// 			c.Validation.Keep()
+// 			c.FlashParams()
+// 			return c.Redirect(Application.Index)
+// 		}
+// 		return c.Render(myName)
+// 	}
+// 我们会到 errors map 里面去检索 myName 这个键上的 error 信息，这样我们就可以在template 中去使用，比如:
+// 		{{range .errors}}
+// 			<li> {{.Message}}
+// 		{{end}}
+// or.
+// 	<p class="{{if .errors.myName}}error{{end}}">
+// 		<input name="myName" value="{{.flash.myName}}"/>
+// 		<span class="error">{{.errors.myName.Message}}</span>
+// 	</p>
 
 func (v *Validation) apply(chk Validator, obj interface{}) *ValidationResult {
 	if chk.IsSatisfied(obj) {
