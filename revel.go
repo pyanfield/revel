@@ -32,6 +32,8 @@ var (
 
 	// Where to look for templates and configuration.
 	// Ordered by priority.  (Earlier paths take precedence over later paths.)
+	// 定义了 template 和 configuration 文件的位置
+	// 按照优先级排序 (早先的 paths 优先于 后来的 paths)
 	CodePaths     []string
 	ConfPaths     []string
 	TemplatePaths []string
@@ -51,6 +53,8 @@ var (
 	CookiePrefix string
 
 	// Loggers
+	// 定义了默认的 logger 信息的格式， 以""为开头，然后是日期，时间，和文件名及行数
+	// 格式可以参见使用命令行启动你的app，如： revel run hello_revel
 	DEFAULT = log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lshortfile)
 	TRACE   = DEFAULT
 	INFO    = DEFAULT
@@ -191,11 +195,13 @@ func newLogger(wr io.Writer) *log.Logger {
 // findSrcPaths uses the "go/build" package to find the source root for Revel
 // and the app.
 func findSrcPaths(importPath string) (revelSourcePath, appSourcePath string) {
+	// 通过 os.Getenv() 去查找环境变量的值，如果查找不到，返回空
+	// 如果 GOPATH 没有定义，提示错误信息，要求用户定义 go 环境的 GOPATH
 	if gopath := os.Getenv("GOPATH"); gopath == "" {
 		ERROR.Fatalln("GOPATH environment variable is not set. ",
 			"Please refer to http://golang.org/doc/code.html to configure your Go environment.")
 	}
-
+	// 通过 FindOnly 的形式导入路径，即，在定位了某个包所在文件夹的位置，Import停止，不会读取任何此文件夹中的文件
 	appPkg, err := build.Import(importPath, "", build.FindOnly)
 	if err != nil {
 		ERROR.Fatalln("Failed to import", importPath, "with error:", err)
@@ -205,7 +211,7 @@ func findSrcPaths(importPath string) (revelSourcePath, appSourcePath string) {
 	if err != nil {
 		ERROR.Fatalln("Failed to find Revel with error:", err)
 	}
-
+	// return package source root directory
 	return revelPkg.SrcRoot, appPkg.SrcRoot
 }
 
