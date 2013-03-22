@@ -87,6 +87,7 @@ func Init(mode, importPath, srcPath string) {
 	// If the SourcePath is not specified, find it using build.Import.
 	var revelSourcePath string // may be different from the app source path
 	if SourcePath == "" {
+		//根据 importPath 得到revelSourcePath 和 SourcePath 的 root directory
 		revelSourcePath, SourcePath = findSrcPaths(importPath)
 	} else {
 		// If the SourcePath was specified, assume both Revel and the app are within it.
