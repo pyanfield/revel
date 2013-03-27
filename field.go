@@ -27,7 +27,7 @@ type Field struct {
 //		    <input type="text" size="10" name="{{$field.Name}}" class="datepicker" value="{{$field.Flash}}">
 //		    * <span class="error">{{$field.Error}}</span>
 //		  </p>
-		{{end}}
+//		{{end}}
 func NewField(name string, renderArgs map[string]interface{}) *Field {
 	err, _ := renderArgs["errors"].(map[string]*ValidationError)[name]
 	return &Field{
