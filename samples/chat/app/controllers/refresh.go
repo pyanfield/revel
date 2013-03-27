@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/robfig/revel"
-	"github.com/robfig/revel/samples/chat/app/chatroom"
+	"github.com/pyanfield/revel"
+	"github.com/pyanfield/revel/samples/chat/app/chatroom"
 )
 
 type Refresh struct {

@@ -6,7 +6,7 @@ package db
 
 import (
 	"database/sql"
-	"github.com/robfig/revel"
+	"github.com/pyanfield/revel"
 )
 
 var (

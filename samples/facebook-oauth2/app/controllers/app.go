@@ -3,9 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/robfig/goauth2/oauth"
-	"github.com/robfig/revel"
-	"github.com/robfig/revel/samples/facebook-oauth2/app/models"
+	"github.com/pyanfield/goauth2/oauth"
+	"github.com/pyanfield/revel"
+	"github.com/pyanfield/revel/samples/facebook-oauth2/app/models"
 	"net/http"
 	"net/url"
 	"strconv"

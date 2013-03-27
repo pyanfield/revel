@@ -90,7 +90,7 @@ var (
 )
 
 func startFakeBookingApp(b *testing.B) {
-	Init("", "github.com/robfig/revel/samples/booking", "")
+	Init("", "github.com/pyanfield/revel/samples/booking", "")
 
 	// Disable logging.
 	TRACE = log.New(ioutil.Discard, "", 0)

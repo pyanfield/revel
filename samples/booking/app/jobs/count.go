@@ -2,8 +2,8 @@ package jobs
 
 import (
 	"fmt"
-	"github.com/robfig/revel"
-	"github.com/robfig/revel/modules/jobs/app/jobs"
+	"github.com/pyanfield/revel"
+	"github.com/pyanfield/revel/modules/jobs/app/jobs"
 )
 
 // Periodically count the bookings in the database.

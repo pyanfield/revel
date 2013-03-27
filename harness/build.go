@@ -2,7 +2,7 @@ package harness
 
 import (
 	"fmt"
-	"github.com/robfig/revel"
+	"github.com/pyanfield/revel"
 	"go/build"
 	"os"
 	"os/exec"
@@ -229,7 +229,7 @@ const REGISTER_CONTROLLERS = `package main
 import (
 	"flag"
 	"reflect"
-	"github.com/robfig/revel"{{range $k, $v := $.ImportPaths}}
+	"github.com/pyanfield/revel"{{range $k, $v := $.ImportPaths}}
 	{{$v}} "{{$k}}"{{end}}
 )
 

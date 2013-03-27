@@ -4,7 +4,7 @@ import (
 	"archive/tar"
 	"compress/gzip"
 	"fmt"
-	"github.com/robfig/revel"
+	"github.com/pyanfield/revel"
 	"io"
 	"os"
 	"path"

@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	REVEL_IMPORT_PATH = "github.com/robfig/revel"
+	REVEL_IMPORT_PATH = "github.com/pyanfield/revel"
 )
 
 var (
@@ -55,7 +55,7 @@ var (
 	// Loggers
 	// 定义了默认的 logger 信息的格式， 以""为开头，然后是日期，时间，和文件名及行数
 	// 格式可以参见使用命令行启动你的app，如： revel run hello_revel
-	DEFAULT = log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lshortfile)
+	DEFAULT = log.New(os.Stderr, "-----------", log.Ldate|log.Ltime|log.Lshortfile)
 	TRACE   = DEFAULT
 	INFO    = DEFAULT
 	WARN    = DEFAULT
@@ -88,15 +88,19 @@ func Init(mode, importPath, srcPath string) {
 	var revelSourcePath string // may be different from the app source path
 	if SourcePath == "" {
 		//根据 importPath 得到revelSourcePath 和 SourcePath 的 root directory
+		// INFO.Println("importPath >>", importPath)
 		revelSourcePath, SourcePath = findSrcPaths(importPath)
+
 	} else {
 		// If the SourcePath was specified, assume both Revel and the app are within it.
 		SourcePath = path.Clean(SourcePath)
 		revelSourcePath = SourcePath
 	}
-
+	// INFO.Println(revelSourcePath, ">>", SourcePath)
 	RevelPath = path.Join(revelSourcePath, filepath.FromSlash(REVEL_IMPORT_PATH))
+	// INFO.Println("RevelPath >>", RevelPath)
 	BasePath = path.Join(SourcePath, filepath.FromSlash(importPath))
+	// INFO.Println("BasePath >>", BasePath)
 	AppPath = path.Join(BasePath, "app")
 	ViewsPath = path.Join(AppPath, "views")
 
@@ -204,6 +208,7 @@ func findSrcPaths(importPath string) (revelSourcePath, appSourcePath string) {
 	}
 	// 通过 FindOnly 的形式导入路径，即，在定位了某个包所在文件夹的位置，Import停止，不会读取任何此文件夹中的文件
 	appPkg, err := build.Import(importPath, "", build.FindOnly)
+	// INFO.Println("appPkg >> ", appPkg)
 	if err != nil {
 		ERROR.Fatalln("Failed to import", importPath, "with error:", err)
 	}
@@ -212,6 +217,7 @@ func findSrcPaths(importPath string) (revelSourcePath, appSourcePath string) {
 	if err != nil {
 		ERROR.Fatalln("Failed to find Revel with error:", err)
 	}
+	// INFO.Println("revelPkg >>", revelPkg)
 	// return package source root directory
 	return revelPkg.SrcRoot, appPkg.SrcRoot
 }
@@ -248,7 +254,7 @@ func addModule(name, importPath, modulePath string) {
 
 	// Hack: There is presently no way for the testrunner module to add the
 	// "test" subdirectory to the CodePaths.  So this does it instead.
-	if importPath == "github.com/robfig/revel/modules/testrunner" {
+	if importPath == "github.com/pyanfield/revel/modules/testrunner" {
 		CodePaths = append(CodePaths, path.Join(BasePath, "tests"))
 	}
 }

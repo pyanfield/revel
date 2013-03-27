@@ -3,8 +3,8 @@ package controllers
 import (
 	"code.google.com/p/go.crypto/bcrypt"
 	"fmt"
-	"github.com/robfig/revel"
-	"github.com/robfig/revel/samples/booking/app/models"
+	"github.com/pyanfield/revel"
+	"github.com/pyanfield/revel/samples/booking/app/models"
 	"strings"
 )
 

@@ -3,8 +3,8 @@ package controllers
 import (
 	"bytes"
 	"fmt"
-	"github.com/robfig/revel"
-	"github.com/robfig/revel/modules/testrunner/app"
+	"github.com/pyanfield/revel"
+	"github.com/pyanfield/revel/modules/testrunner/app"
 	"html"
 	"html/template"
 	"reflect"

@@ -1,6 +1,6 @@
 package controllers
 
-import "github.com/robfig/revel"
+import "github.com/pyanfield/revel"
 
 func init() {
 	revel.RegisterPlugin(GorpPlugin{})
